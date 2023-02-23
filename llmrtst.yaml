@@ -1,0 +1,14 @@
+pool:
+  vmImage: ubuntu-latest
+
+trigger:
+  - main
+
+steps:
+  - script: docker compose -f local.yml run --rm django pytest --junit-xml=/app/TEST-report.xml
+    displayName: pytest
+    continueOnError: true
+  - task: PublishTestResults@2
+    inputs:
+    testResultsFormat: 'JUnit' 
+    testResultsFiles: '**/TEST-*.xml'
